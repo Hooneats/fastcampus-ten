@@ -17,7 +17,10 @@ public class Calculator {
         return arithmeticOperators.stream()
                 .filter(arithmeticOperators -> arithmeticOperators.supports(operator))
                 .findFirst()
-                .map(arithmeticOperator -> arithmeticOperator.calculate(operand1, operand2))
+                .map(arithmeticOperator -> arithmeticOperator.calculate(
+                        operand1,
+                        new PositiveNumber(operand2)
+                ))
                 .orElseThrow(() -> new IllegalArgumentException("올바른 사칙연산이 아닙니다."));
     }
 }

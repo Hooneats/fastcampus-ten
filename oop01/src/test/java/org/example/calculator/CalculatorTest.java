@@ -54,11 +54,14 @@ public class CalculatorTest {
         );
     }
 
+    /**
+     * 사실 PositiveNumber 를 따로 테스트 했기에 아래는 검증할 필요가 없다.
+     */
     @DisplayName("나눗셈에서 0을 나누는 경우 IllegalArgument 예외를 발생시킨다.")
     @Test
     void calculateExceptionTest() {
         assertThatCode(()->Calculator.calculate(10, "/", 0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("0으로는 나눌 수 없습니다.");
+                .hasMessage("0또는 음수를 전달할 수 없습니다.");
     }
 }
