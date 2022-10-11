@@ -1,4 +1,4 @@
-package org.example.calculator.calculator;
+package org.example.calculator;
 
 public class Calculator {
 
