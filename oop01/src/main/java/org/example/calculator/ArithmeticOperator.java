@@ -36,7 +36,7 @@ public enum ArithmeticOperator {
 
     protected abstract int arithmeticCalculate(final int operand1, final int operand2);
 
-    // 외부에 노출
+    // 외부에 노출 사용 ArithmeticOperator.calculate(operand1, operator, operand2);
     public static int calculate(int operand1, String operator, int operand2) {
         ArithmeticOperator arithmeticOperator = Arrays.stream(values())
                 .filter(value -> value.operator.equals(operator))
