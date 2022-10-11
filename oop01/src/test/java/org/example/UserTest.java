@@ -15,7 +15,8 @@ public class UserTest {
 
         // when
         // 항상 참인 패스워드 주입
-        user.initPassword(new CorrectFixedPasswordGenerator());
+//        user.initPassword(new CorrectFixedPasswordGenerator());
+        user.initPassword(() -> "aabbccdd");
 
         // then
         assertThat(user.getPassword()).isNotNull();
@@ -29,7 +30,8 @@ public class UserTest {
 
         // when
         // 항상 실패하는 패스워드 주입
-        user.initPassword(new WrongFixedPasswordGenerator());
+//        user.initPassword(new WrongFixedPasswordGenerator());
+        user.initPassword(() -> "aa");
 
         // then
         assertThat(user.getPassword()).isNull();
