@@ -1,16 +1,11 @@
 package org.example.password;
 
 
-import org.example.password.PasswordValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-/**
- * 테스트는
- * 실패 -> 성공 -> 리팩토링 의 과정이다.
- */
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
