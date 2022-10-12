@@ -34,7 +34,8 @@ public class GradeCalculatorTest {
                 new Course("OOP", 3, "B+"),
                 new Course("자료구조", 3, "B")
         );
-        GradeCalculator gradeCalculator = new GradeCalculator(courses);
+//        GradeCalculator gradeCalculator = new GradeCalculator(courses);
+        GradeCalculator gradeCalculator = new GradeCalculator(new Courses(courses));
         double gradeResult =  gradeCalculator.calculateGrade(); // 성적계산
 
         assertThat(gradeResult).isEqualTo(3.25);
