@@ -1,8 +1,8 @@
-package org.example;
+package org.example.http.request;
 
 import lombok.ToString;
+import org.example.http.request.query.QueryStrings;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @ToString

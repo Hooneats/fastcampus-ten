@@ -1,4 +1,4 @@
-package org.example;
+package org.example.http.request.query;
 
 import lombok.ToString;
 
