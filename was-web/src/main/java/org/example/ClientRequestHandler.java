@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Step1 - 사용자 요청을 메인 thread 가 처리하도록 한다.
@@ -23,8 +25,8 @@ import java.nio.charset.StandardCharsets;
  * ㄴ Body
  */
 public class ClientRequestHandler implements Runnable {
-
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestHandler.class);
+
     private final Socket clientSocket;
 
     public ClientRequestHandler(Socket clientSocket) {
