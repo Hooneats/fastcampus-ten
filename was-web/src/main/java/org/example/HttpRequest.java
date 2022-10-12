@@ -10,7 +10,6 @@ public class HttpRequest {
 
     public HttpRequest(BufferedReader br) throws IOException {
         this.requestLine = new RequestLine(br.readLine()); // GET /calculate?operand1=11&operator=*&operand2=55 HTTP/1.1
-        System.out.println("requestLine = " + requestLine);
     }
 
     public boolean isGetRequest() {

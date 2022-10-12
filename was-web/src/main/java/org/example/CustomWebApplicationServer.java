@@ -30,51 +30,11 @@ public class CustomWebApplicationServer {
                 logger.info("[CustomWebApplicationServer] client connected!");
 
                 /**
-                 * Step1 - 사용자 요청을 메인 thread 가 처리하도록 한다.
-                 * HttpRequest
-                 * ㄴ Header  -> GET /calculate?operand1=11&operator=*&operand2=55 HTTP/1.1
-                                ㄴ HttpMethod , path , queryString , protocol/version
-                                ㄴ ...
-                 * ㄴ Blank Line
-                 * ㄴ Body
-                 *
-                 * HttpResponse
-                 * ㄴ Header
-                 * ㄴ Blank Line
-                 * ㄴ Body
+                 * Step2 - 사용자 요청이 들어올 때마다 Thread 를 새로 생성해서 사용자 요청을 처리하도록 한다.
+                 * ㄴ 쓰레드를 계속 요청마다 만들다 보면 쓰레드가 많아지고, 쓰레드 컨텍스트 체인지 비용 등 많은 비용으로인해
+                 * 서버가 다운될 수 있다.
                  */
-                try (
-                        InputStream in = clientSocket.getInputStream();
-                        OutputStream out = clientSocket.getOutputStream();
-                        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-                        DataOutputStream dos = new DataOutputStream(out)
-                ) {
-//                    String line;
-//                    while ((line = br.readLine()) != "" || (line = br.readLine()) != null) {
-//                        System.out.println("line = " + line);
-//                        break;
-//                    }
-
-                    HttpRequest httpRequest = new HttpRequest(br);
-
-                    // GET /calculate?operand1=11&operator=*&operand2=55 HTTP/1.1
-                    if (httpRequest.isGetRequest() && httpRequest.matchPath("/calculate")) {
-                        QueryStrings queryStrings = httpRequest.getQueryString();
-
-                        int operand1 = Integer.parseInt(queryStrings.getValue("operand1"));
-                        String operator = queryStrings.getValue("operator");
-                        int operand2 = Integer.parseInt(queryStrings.getValue("operand2"));
-
-                        int result = Calculator.calculate(operand1, operator, operand2);
-                        byte[] body = String.valueOf(result).getBytes();
-                        System.out.println("result = " + result);
-
-                        HttpResponse httpResponse = new HttpResponse(dos);
-                        httpResponse.response200Header("application/json", body.length);
-                        httpResponse.responseBody(body);
-                    }
-
-                }
+                new Thread(new ClientRequestHandler(clientSocket)).start();
             }
         }
     }

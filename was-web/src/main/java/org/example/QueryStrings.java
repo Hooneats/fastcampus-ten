@@ -21,7 +21,6 @@ public class QueryStrings {
                     }
                     queryStrings.add(new QueryString(values[0], values[1]));
                 });
-        System.out.println("queryStrings = " + queryStrings);
     }
 
     public String getValue(String key) {

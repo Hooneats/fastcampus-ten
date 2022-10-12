@@ -23,10 +23,8 @@ public class RequestLine {
         String[] urlPathTokens = tokens[1].split("\\?");
         this.urlPath = urlPathTokens[0]; // /calculate
 
-        System.out.println("urlPathTokens = " + Arrays.toString(urlPathTokens));
         if (urlPathTokens.length == 2) {
             this.queryStrings = new QueryStrings(urlPathTokens[1]); // operand1=11&operator=*&operand2=55
-            System.out.println("this.queryStrings = " + this.queryStrings);
         }
 
 
