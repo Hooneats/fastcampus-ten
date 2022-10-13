@@ -1,4 +1,5 @@
 rootProject.name = 'fast-ten'
 include 'oop01'
 include 'was-web'
+include 'jdbc-practice'
 
