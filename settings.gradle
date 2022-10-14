@@ -3,4 +3,5 @@ include 'oop01'
 include 'was-web'
 include 'jdbc-practice'
 include 'reflection'
+include 'mvc-practice'
 
