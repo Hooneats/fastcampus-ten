@@ -25,6 +25,7 @@
     <c:forEach items="${users}" var="user" varStatus="status">
         <tr>
             <th scope="row">${status.count}</th>
+<%--            Getter 를 통해 값을 가져옴          --%>
             <td>${user.userId}</td>
             <td>${user.name}</td>
         </tr>
