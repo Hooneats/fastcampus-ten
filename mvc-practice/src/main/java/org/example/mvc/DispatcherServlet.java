@@ -28,7 +28,9 @@ public class DispatcherServlet extends HttpServlet {
         log.info("DispatcherServlet.service");
         try {
             // handler mappings 에서 handler(Controller)를 찾고
-            Controller handler = requestMappingHandlerMapping.findHandler(request.getRequestURI());
+            Controller handler =
+                requestMappingHandlerMapping
+                    .findHandler(new HandlerKey(RequestMethod.valueOf(request.getMethod()), request.getRequestURI()));
 
             // handler(Controller) 에게 작업을 위임한다. -> controller 는 viewName 을 반환한다.
             String viewName = handler.handleRequest(request, response);
