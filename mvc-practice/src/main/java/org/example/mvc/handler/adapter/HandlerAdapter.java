@@ -1,8 +1,8 @@
-package org.example.mvc;
+package org.example.mvc.handler.adapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.example.mvc.view.ModelAndView;
+import org.example.mvc.view.vo.ModelAndView;
 
 public interface HandlerAdapter {
 

@@ -1,10 +1,11 @@
-package org.example.mvc;
+package org.example.mvc.handler.adapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.example.mvc.view.ModelAndView;
+import org.example.mvc.handler.AnnotationHandler;
+import org.example.mvc.view.vo.ModelAndView;
 
-public class AnnotationHandlerAdapter implements HandlerAdapter{
+public class AnnotationHandlerAdapter implements HandlerAdapter {
 
     @Override
     public boolean supports(Object handler) {

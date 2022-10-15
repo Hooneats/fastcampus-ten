@@ -1,4 +1,4 @@
-package org.example.mvc;
+package org.example.mvc.handler.mapping.vo;
 
 import lombok.EqualsAndHashCode;
 

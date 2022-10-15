@@ -9,10 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.example.mvc.view.JspViewResolver;
-import org.example.mvc.view.ModelAndView;
+import org.example.mvc.handler.adapter.AnnotationHandlerAdapter;
+import org.example.mvc.handler.adapter.HandlerAdapter;
+import org.example.mvc.handler.adapter.SimpleControllerHandlerAdapter;
+import org.example.mvc.handler.mapping.AnnotationHandlerMapping;
+import org.example.mvc.handler.mapping.vo.HandlerKey;
+import org.example.mvc.handler.mapping.HandlerMapping;
+import org.example.mvc.handler.mapping.RequestMappingHandlerMapping;
+import org.example.mvc.handler.mapping.vo.RequestMethod;
+import org.example.mvc.view.resolver.JspViewResolver;
+import org.example.mvc.view.vo.ModelAndView;
 import org.example.mvc.view.View;
-import org.example.mvc.view.ViewResolver;
+import org.example.mvc.view.resolver.ViewResolver;
 
 @Slf4j
 @WebServlet("/")

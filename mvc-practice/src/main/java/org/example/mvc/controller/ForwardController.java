@@ -3,7 +3,7 @@ package org.example.mvc.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ForwardController implements Controller {
+public class ForwardController implements ControllerInterface {
     private final String forwardUriPath;
 
     public ForwardController(String forwardUriPath) {
