@@ -4,4 +4,5 @@ include 'was-web'
 include 'jdbc-practice'
 include 'reflection'
 include 'mvc-practice'
+include 'DI-practice'
 
