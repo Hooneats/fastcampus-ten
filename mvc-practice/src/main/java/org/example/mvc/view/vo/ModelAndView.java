@@ -1,4 +1,4 @@
-package org.example.mvc.view;
+package org.example.mvc.view.vo;
 
 import java.util.Collections;
 import java.util.HashMap;

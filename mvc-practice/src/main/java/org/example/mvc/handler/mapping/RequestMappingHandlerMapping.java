@@ -1,14 +1,15 @@
-package org.example.mvc;
+package org.example.mvc.handler.mapping;
 
 import java.util.HashMap;
 import java.util.Map;
-import lombok.EqualsAndHashCode;
 import org.example.mvc.controller.*;
+import org.example.mvc.handler.mapping.vo.HandlerKey;
+import org.example.mvc.handler.mapping.vo.RequestMethod;
 
-public class RequestMappingHandlerMapping implements HandlerMapping{
+public class RequestMappingHandlerMapping implements HandlerMapping {
 
     // key: urlPath, value: Controller
-    private Map<HandlerKey, Controller> mappings = new HashMap<>();
+    private Map<HandlerKey, ControllerInterface> mappings = new HashMap<>();
 
     public void init() {
 //        mappings.put(new HandlerKey(RequestMethod.GET,"/"), new HomeController()); // Annotation 기반으로 변경

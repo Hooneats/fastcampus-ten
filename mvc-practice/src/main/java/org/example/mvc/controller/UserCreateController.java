@@ -6,7 +6,7 @@ import org.example.mvc.repository.UserRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserCreateController implements Controller{
+public class UserCreateController implements ControllerInterface {
 
     @Override
     public String handleRequest(HttpServletRequest request, HttpServletResponse response)
