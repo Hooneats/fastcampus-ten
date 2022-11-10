@@ -2,32 +2,47 @@ package org.example.mvc;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.example.mvc.controller.Controller;
-import org.example.mvc.view.JspViewResolver;
+import org.example.mvc.handler.adapter.AnnotationHandlerAdapter;
+import org.example.mvc.handler.adapter.HandlerAdapter;
+import org.example.mvc.handler.adapter.SimpleControllerHandlerAdapter;
+import org.example.mvc.handler.mapping.AnnotationHandlerMapping;
+import org.example.mvc.handler.mapping.vo.HandlerKey;
+import org.example.mvc.handler.mapping.HandlerMapping;
+import org.example.mvc.handler.mapping.RequestMappingHandlerMapping;
+import org.example.mvc.handler.mapping.vo.RequestMethod;
+import org.example.mvc.view.resolver.JspViewResolver;
+import org.example.mvc.view.vo.ModelAndView;
 import org.example.mvc.view.View;
-import org.example.mvc.view.ViewResolver;
+import org.example.mvc.view.resolver.ViewResolver;
 
 @Slf4j
 @WebServlet("/")
 public class DispatcherServlet extends HttpServlet {
 
-    private List<ViewResolver> viewResolvers;
+    private List<HandlerMapping> handlerMappings;
 
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    private List<HandlerAdapter> handlerAdapters;
+
+    private List<ViewResolver> viewResolvers;
 
     @Override
     public void init() throws ServletException {
-        this.requestMappingHandlerMapping = new RequestMappingHandlerMapping();
+        RequestMappingHandlerMapping requestMappingHandlerMapping = new RequestMappingHandlerMapping();
         requestMappingHandlerMapping.init();
+
+        AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping("org.example");
+        annotationHandlerMapping.initialIze();
+
+        handlerMappings = List.of(requestMappingHandlerMapping, annotationHandlerMapping);
+
+        handlerAdapters = List.of(new SimpleControllerHandlerAdapter(), new AnnotationHandlerAdapter());
 
         viewResolvers = Collections.singletonList(new JspViewResolver());
     }
@@ -36,22 +51,39 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         log.info("DispatcherServlet.service");
+
+        String requestUri = request.getRequestURI();
+        RequestMethod requestMethod = RequestMethod.valueOf(request.getMethod());
+
         try {
             // handler mappings 에서 handler(Controller)를 찾고
-            Controller handler =
-                requestMappingHandlerMapping
-                    .findHandler(new HandlerKey(RequestMethod.valueOf(request.getMethod()), request.getRequestURI()));
+            Object handler =
+                handlerMappings.stream()
+                    .filter(handlerMapping ->
+                        handlerMapping.findHandler(new HandlerKey(requestMethod, requestUri)) != null
+                    )
+                    .map(handlerMapping -> handlerMapping.findHandler(
+                        new HandlerKey(requestMethod, requestUri)))
+                    .findFirst()
+                    .orElseThrow(() -> new ServletException(
+                        "No Handler for Request Method:" + requestMethod + ", Reuqest Uri:"
+                            + requestUri));
 
+            // HandlerAdapter 에게 위임해 Handler(Controller) 인지 확인후 실행하도록 한다.(어뎁터 내부에서 핸들러 실행)
             // handler(Controller) 에게 작업을 위임한다. -> controller 는 viewName 을 반환한다.
-            String viewName = handler.handleRequest(request, response);
+            HandlerAdapter filteredHandlerAdapter = handlerAdapters.stream()
+                .filter(handlerAdapter -> handlerAdapter.supports(handler))
+                .findFirst()
+                .orElseThrow(
+                    () -> new ServletException("No adapter for handelr [" + handler + "]"));
+            ModelAndView modelAndView = filteredHandlerAdapter.handle(request, response, handler);
 
             // viewName 이 redirect:/users 이면 redirect: 제외 AND forward 기능도
             // ㄴ ViewResolver 로 처리해보자
-
             viewResolvers.forEach(viewResolver -> {
-                View view = viewResolver.resolveView(viewName);
+                View view = viewResolver.resolveView(modelAndView.getViewName());
                 try {
-                    view.render(new HashMap<>(), request, response);
+                    view.render(modelAndView.getModel(), request, response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

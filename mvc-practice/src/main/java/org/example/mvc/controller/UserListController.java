@@ -2,11 +2,10 @@ package org.example.mvc.controller;
 
 import org.example.mvc.repository.UserRepository;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserListController implements Controller{
+public class UserListController implements ControllerInterface {
 
     @Override
     public String handleRequest(HttpServletRequest request, HttpServletResponse response)
