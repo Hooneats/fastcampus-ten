@@ -6,4 +6,5 @@ include 'reflection'
 include 'mvc-practice'
 include 'servlet'
 include 'DI-practice'
+include 'board'
 
