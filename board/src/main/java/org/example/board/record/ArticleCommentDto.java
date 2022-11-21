@@ -1,8 +1,5 @@
 package org.example.board.record;
 
-import lombok.Data;
-import org.example.board.dto.ArticleDto;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
