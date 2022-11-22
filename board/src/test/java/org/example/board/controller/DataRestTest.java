@@ -1,5 +1,6 @@
 package org.example.board.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+@Disabled("Spring Data REST 통합테스트는 불필요하므로 제외시킴")
 //@WebMvcTest // @WebMvcTest 는 슬라이스 테스트로 컨트롤러외의 빈을 로드하지 않는다 때문에 data rest 의 빈을 읽지 않기에 통합테스트 @SpringBootTest 사용
 @DisplayName("Data Rest Test - API 테스트")
 @SpringBootTest
