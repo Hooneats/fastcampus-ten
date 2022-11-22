@@ -1,14 +1,8 @@
 package org.example.board.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +10,7 @@ import java.util.Objects;
 @ToString
 @Table(indexes = {
         @Index(columnList = "content"),
-        @Index(columnList = "createAt"),
+        @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
 @Entity(name = "article_comment")

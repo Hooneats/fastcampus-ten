@@ -28,6 +28,10 @@ dependencies {
     // User Custom properties file elements
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5' // thymeleaf+security
+
     runtimeOnly 'mysql:mysql-connector-java'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // thymeleaf 의 화면 캐시를 끔

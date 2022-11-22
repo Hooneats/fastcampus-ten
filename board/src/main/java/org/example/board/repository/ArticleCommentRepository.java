@@ -21,9 +21,9 @@ public interface ArticleCommentRepository extends
     default void customize(QuerydslBindings bindings, QArticleComment root) {
         // QuerydslPredicateExecutor 에 의해 모든 필드가 열려있다. -> 선택적인 필드만 열리게끔 변경
         bindings.excludeUnlistedProperties(true);
-        bindings.including(root.content, root.createAt, root.createdBy);
+        bindings.including(root.content, root.createdAt, root.createdBy);
         bindings.bind(root.content).first(StringExpression::containsIgnoreCase);
-        bindings.bind(root.createAt).first(DateTimeExpression::eq);
+        bindings.bind(root.createdAt).first(DateTimeExpression::eq);
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
     }
 }
