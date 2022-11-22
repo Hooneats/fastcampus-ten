@@ -11,16 +11,18 @@ import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@ActiveProfiles("testdb") // test 모듈에 application.properties 를 만들면 따로 active 설정 안해도된다.
 @DisplayName("JPA 연결 테스트")
 @Import({JpaConfig.class, InitTestData.class})
 // TODO : 참고하자 - https://charliezip.tistory.com/21
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다.
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // application.properties 의 다음 설정과 같다 -> spring.test.database.replace: none
+@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다. 스프링 부트가 자동으로 인메모리를 만들지 않게하기위해 @AutoConfigureTestDatabase 사용
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
