@@ -1,25 +1,25 @@
 package org.example.board;
 
+import lombok.RequiredArgsConstructor;
 import org.example.board.domain.Article;
 import org.example.board.domain.ArticleComment;
 import org.example.board.repository.ArticleCommentRepository;
 import org.example.board.repository.ArticleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class InitTestData {
+@Component
+@RequiredArgsConstructor
+public class InitData {
 
-    @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    ArticleCommentRepository articleCommentRepository;
+    private final ArticleRepository articleRepository;
+    private final ArticleCommentRepository articleCommentRepository;
 
-    @EventListener(ApplicationReadyEvent.class)
+    @PostConstruct
     public void init() {
         //Article
         final List<Article> articles = createArticlesDummyData();
@@ -34,10 +34,10 @@ public class InitTestData {
         final List<Article> articles = new ArrayList<>();
         IntStream.range(0, 30)
                 .forEach(num ->
-                    articles.add(
-                            Article.of("new Article" + num, "new Content" + num, "#spring")
-                    )
-        );
+                        articles.add(
+                                Article.of("new Article" + num, "new Content" + num, "#spring")
+                        )
+                );
         return articles;
     }
 
@@ -49,4 +49,5 @@ public class InitTestData {
                 );
         return articleComments;
     }
+
 }

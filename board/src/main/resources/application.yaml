@@ -7,7 +7,7 @@ logging:
   level:
     org.example.board: debug
     org.springframework.web.servlet: debug # request, response logging
-#    org.hibernate.SQL: debug # nested logging with -> org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
@@ -26,9 +26,9 @@ spring:
       hibernate.default_batch_fetch_size: 100
 #  sql.init.mode: always # test data insert initialization by resources.data.sql
 #  thymeleaf.cache: false
-#  data.rest:
-#    base-path: /api
-#    detection-strategy: annotated
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated
 
 ---
 
