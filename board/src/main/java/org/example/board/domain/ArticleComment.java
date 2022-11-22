@@ -19,9 +19,8 @@ import java.util.Objects;
         @Index(columnList = "createAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity(name = "article_comment")
-public class ArticleComment {
+public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,22 +33,6 @@ public class ArticleComment {
     @Setter
     @Column(nullable = false, length = 500)
     private String content; // 본문
-
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createAt; // 생성일시
-
-    @CreatedBy
-    @Column(nullable = false, length = 100)
-    private String createdBy; // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일시
-
-    @LastModifiedBy
-    @Column(nullable = false, length = 100)
-    private String modifiedBy; // 수정자
 
     private ArticleComment(Article article, String content) {
         this.article = article;
@@ -65,7 +48,7 @@ public class ArticleComment {
         if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
 //        ArticleComment that = (ArticleComment) o;
-        if (!(o instanceof ArticleComment that)) return false;
+        if (!(o instanceof ArticleComment that)) return false; // 자바 버전 14 이후 패턴 매칭
         return id != null && id.equals(that.id);
     }
 

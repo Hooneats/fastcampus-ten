@@ -23,9 +23,8 @@ import java.util.Set;
         @Index(columnList = "createAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity(name = "article")
-public class Article {
+public class Article extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,21 +47,9 @@ public class Article {
     @ToString.Exclude // 순환참조 문제로 ToString 을 끊는다면 OneToMany 에서 끊는다.
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 중복 허용X
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createAt; // 생성일시
-
-    @CreatedBy
-    @Column(nullable = false, length = 100)
-    private String createdBy; // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일시
-
-    @LastModifiedBy
-    @Column(nullable = false, length = 100)
-    private String modifiedBy; // 수정자
+    // Auditing 기능 따로 클래스로 뺐을 때
+    // 치환되는 방식 @Embedded
+    // 상속 방식 @MappedSuperClass
 
     private Article(String title, String content, String hashtag) {
         this.title = title;
@@ -84,7 +71,7 @@ public class Article {
         if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
 //        Article article = (Article) o;
-        if (!(o instanceof Article article)) return false;
+        if (!(o instanceof Article article)) return false; // 자바 버전 14 이후 패턴 매칭
         return id != null && id.equals(article.id); // 영속화한 객체 즉, id 있는 것들만 비교대상이기에 'id != null &&' 추가
     }
 
