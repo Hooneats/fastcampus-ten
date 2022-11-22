@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfig.class, InitTestData.class})
 // TODO : 참고하자 - https://charliezip.tistory.com/21
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // application.properties 의 다음 설정과 같다 -> spring.test.database.replace: none
-@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다. 스프링 부트가 자동으로 인메모리를 만들지 않게하기위해 @AutoConfigureTestDatabase 사용
+@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다. 스프링 부트가 자동으로 인메모리를 만들지 않고 설정파일기준으로 만들기 위해 @AutoConfigureTestDatabase 사용
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
