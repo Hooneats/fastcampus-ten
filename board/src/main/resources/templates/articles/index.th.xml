@@ -2,5 +2,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <thlogic>
     <attr sel="#header"  th:replace="~{header :: header}"/>
-    <attr sel="footer"   th:replace="~{footer :: footer}"/>
+    <attr sel="footer"   th:replace="~{footer :: #th-footer}"/>
 </thlogic>
