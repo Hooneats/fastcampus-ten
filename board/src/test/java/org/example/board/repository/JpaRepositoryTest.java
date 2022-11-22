@@ -3,6 +3,7 @@ package org.example.board.repository;
 import org.example.board.InitData;
 import org.example.board.config.JpaConfig;
 import org.example.board.domain.Article;
+import org.example.board.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,18 @@ class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
     // JUNIT 5 와 최신의 스프링부트는 테스트에서도 생성자 주입 가능
     //  --> @DataJpaTest 안에 @ExtendWith(SpringExtension.class) 안에 @Autowired 관련 로직 있다.
     JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
-            @Autowired ArticleCommentRepository articleCommentRepository) {
+            @Autowired ArticleCommentRepository articleCommentRepository,
+            @Autowired UserAccountRepository userAccountRepository
+            ) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @DisplayName("Select test")
@@ -51,11 +56,12 @@ class JpaRepositoryTest {
     @Test
     void givenTestData_whenInserting_thenWorksFine() {
         //Given
+        final UserAccount userAccount = userAccountRepository.findById("hooneats0").orElseThrow();
         final long previousCount = articleRepository.count();
-        final Article article = Article.of("new Article", "new Content", "#spring");
+        final Article article = Article.of(userAccount, "new Content", "내용내용내용", "#spring");
 
         //When
-        final Article savedArticle = articleRepository.save(article);
+        articleRepository.save(article);
 
         //Then
         assertThat(articleRepository.count())

@@ -31,6 +31,11 @@ public class Article extends AuditingFields {
     private Long id;
 
     @Setter
+    @JoinColumn(name = "userId")
+    @ManyToOne(optional = false)
+    private UserAccount userAccount; // 유저 정보 (ID)
+
+    @Setter
     @Column(nullable = false) // @Column 은 생략이 가능하나 nullable false 등 설정을 위해
     private String title; // 제목
 
@@ -43,7 +48,7 @@ public class Article extends AuditingFields {
 
     // 양방향
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 실무에서는 양방향을 잘 안쓴다. 예를 들어 '게시글이 사라지면' 댓글이 삭제되는게 맞지만, 운영상 백업 목벅으로 댓글을 남기고 싶을 떄도 있기에
-    @OrderBy("id")
+    @OrderBy("createdAt DESC")
     @ToString.Exclude // 순환참조 문제로 ToString 을 끊는다면 OneToMany 에서 끊는다.
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 중복 허용X
 
@@ -51,15 +56,16 @@ public class Article extends AuditingFields {
     // 치환되는 방식 @Embedded
     // 상속 방식 @MappedSuperClass
 
-    private Article(String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
     // 팩토리 메서드 패턴 (보통 여러 매개변수로 할 경우 메서드 이름으로 of 를 사용)
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
     }
 
     /**

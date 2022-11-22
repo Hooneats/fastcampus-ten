@@ -28,17 +28,17 @@ public class InitData {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        // UserAccount 테스트 계정
+        final List<UserAccount> userAccounts = createUserAccountDummyData();
+        final List<UserAccount> savedUserAccounts = userAccountRepository.saveAll(userAccounts);
+
         //Article
-        final List<Article> articles = createArticlesDummyData();
+        final List<Article> articles = createArticlesDummyData(savedUserAccounts);
         final List<Article> savedArticles = articleRepository.saveAll(articles);
 
         // Article_Comment
-        final List<ArticleComment> articleComments = createArticleCommentsDummyData(savedArticles);
+        final List<ArticleComment> articleComments = createArticleCommentsDummyData(savedArticles, savedUserAccounts);
         articleCommentRepository.saveAll(articleComments);
-
-        // UserAccount 테스트 계정
-        final List<UserAccount> userAccounts = createUserAccountDummyData();
-        userAccountRepository.saveAll(userAccounts);
     }
 
     private List<UserAccount> createUserAccountDummyData() {
@@ -52,22 +52,22 @@ public class InitData {
         return userAccounts;
     }
 
-    private static List<Article> createArticlesDummyData() {
+    private  List<Article> createArticlesDummyData(List<UserAccount> savedUserAccounts) {
         final List<Article> articles = new ArrayList<>();
         IntStream.range(0, 30)
                 .forEach(num ->
                         articles.add(
-                                Article.of("new Article" + num, "new Content" + num, "#spring")
+                                Article.of(savedUserAccounts.get(0),"new Article" + num, "new Content" + num, "#spring")
                         )
                 );
         return articles;
     }
 
-    private static List<ArticleComment> createArticleCommentsDummyData(List<Article> savedArticles) {
+    private  List<ArticleComment> createArticleCommentsDummyData(List<Article> savedArticles, List<UserAccount> savedUserAccounts) {
         final List<ArticleComment> articleComments = new ArrayList<>();
         IntStream.range(0, 25)
                 .forEach(num ->
-                        articleComments.add(ArticleComment.of(savedArticles.get(num), "new Comment_Content" + num))
+                        articleComments.add(ArticleComment.of(savedArticles.get(num), savedUserAccounts.get(0),"new Comment_Content" + num))
                 );
         return articleComments;
     }
