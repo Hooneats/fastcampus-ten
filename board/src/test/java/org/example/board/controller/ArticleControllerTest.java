@@ -22,7 +22,6 @@ class ArticleControllerTest {
     }
 
 
-    @Disabled("구현중")
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
@@ -31,7 +30,8 @@ class ArticleControllerTest {
         //when
         mvc.perform(MockMvcRequestBuilders.get("/articles"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))
+//                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))  // 기대는 'text/html' 지만 실제는 'text/html;charset=UTF-8' 따라서 호환되는 타입까지 열어주는 contentTypeCompatibleWith() 사용
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(MockMvcResultMatchers.view().name("articles/index"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("articles")); // 있나없나존재여부
     }
