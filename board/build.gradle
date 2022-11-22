@@ -32,7 +32,7 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // thymeleaf 의 화면 캐시를 끔
 
-//    testRuntimeOnly 'com.h2database:h2' // test module application.properties
+    testRuntimeOnly 'com.h2database:h2' // test module application.properties
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

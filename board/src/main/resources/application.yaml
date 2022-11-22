@@ -1,16 +1,17 @@
-# debug is Enable debug logs --> true is spring boot logs but too many so this project false
-debug: false
-
-management.endpoints.web.exposure.include: "*"
-
-logging:
-  level:
-    org.example.board: debug
-    org.springframework.web.servlet: debug # request, response logging
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
-
 spring:
+  profiles:
+    active: local
+    include:
+      - logging
+      - thymeleaf
+      - data-rest
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
   datasource:
     url: jdbc:mysql://localhost:3306/board
     username: hooneats
@@ -25,13 +26,44 @@ spring:
       hibernate.format_sql: true
       hibernate.default_batch_fetch_size: 100
 #  sql.init.mode: always # test data insert initialization by resources.data.sql
-#  thymeleaf.cache: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: logging
+
+# debug is Enable debug logs --> true is spring boot logs but too many so this project false
+debug: false
+
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    org.example.board: debug
+    org.springframework.web.servlet: debug # request, response logging
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+---
+spring:
+  config:
+    activate:
+      on-profile: thymeleaf
+
+  thymeleaf.cache: false # for devtools
+  thymeleaf3: # custom configuration
+    decoupled-logic: true # spring-boot-configuration-processor
+
+---
+spring:
+  config:
+    activate:
+      on-profile: data-rest
+
   data.rest:
     base-path: /api
     detection-strategy: annotated
-  thymeleaf3:
-    decoupled-logic: true # spring-boot-configuration-processor
-
 ---
 
 spring:

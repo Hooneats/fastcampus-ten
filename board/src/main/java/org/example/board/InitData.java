@@ -5,6 +5,9 @@ import org.example.board.domain.Article;
 import org.example.board.domain.ArticleComment;
 import org.example.board.repository.ArticleCommentRepository;
 import org.example.board.repository.ArticleRepository;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+@Profile({"local","test"})
 @Component
 @RequiredArgsConstructor
 public class InitData {
@@ -19,7 +23,7 @@ public class InitData {
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void init() {
         //Article
         final List<Article> articles = createArticlesDummyData();
