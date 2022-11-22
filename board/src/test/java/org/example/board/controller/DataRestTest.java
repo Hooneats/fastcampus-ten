@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 //@WebMvcTest // @WebMvcTest 는 슬라이스 테스트로 컨트롤러외의 빈을 로드하지 않는다 때문에 data rest 의 빈을 읽지 않기에 통합테스트 @SpringBootTest 사용
 @DisplayName("Data Rest Test - API 테스트")
 @SpringBootTest
-@AutoConfigureMockMvc
-// @WebMvcTest 가 아닌 @SpringBootTest 는 webEnvironment = SpringBootTest.WebEnvironment.MOCK 목 까지는 불러오나 MockMvc 는 따로 넣어줘야하기에
+@AutoConfigureMockMvc // @WebMvcTest 가 아닌 @SpringBootTest 는 webEnvironment = SpringBootTest.WebEnvironment.MOCK 목 까지는 불러오나 MockMvc 는 따로 넣어줘야하기에
 @Transactional // 통합테스트여서 데이터가 DB 에 들어가게된다. 때문에 테스트이기에 @Transactional 을 넣어줘 롤백되게 하자
 public class DataRestTest {
 
