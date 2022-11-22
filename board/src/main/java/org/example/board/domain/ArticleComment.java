@@ -21,12 +21,12 @@ public class ArticleComment extends AuditingFields {
     private Long id;
 
     @Setter
-    @ManyToOne(optional = false) // 'optional=false' 필수, 또한 댓글은 지워져도 게시글은 지워지면 안되기에 cascade 는 기본값인 none 으로 사용
+    @ManyToOne(optional = false, fetch = FetchType.LAZY) // 'optional=false' 필수, 또한 댓글은 지워져도 게시글은 지워지면 안되기에 cascade 는 기본값인 none 으로 사용
     private Article article; // 게시글 (ID)
 
     @Setter
     @JoinColumn(name = "userId")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UserAccount userAccount; // 유저 정보 (ID)
 
     @Setter

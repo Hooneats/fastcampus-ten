@@ -32,7 +32,7 @@ public class Article extends AuditingFields {
 
     @Setter
     @JoinColumn(name = "userId")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UserAccount userAccount; // 유저 정보 (ID)
 
     @Setter
