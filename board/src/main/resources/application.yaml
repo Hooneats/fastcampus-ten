@@ -64,11 +64,9 @@ spring:
   data.rest:
     base-path: /api
     detection-strategy: annotated
----
 
+---
 spring:
-  config.activate.on-profile: testdb # equals before properties is 'profiles.active'
-#  datasource:
-#    url: jdbc:h2:mem:board;mode=mysql
-#    driver-class-name: org.h2.Driver
-#  test.database.replace: none # this properties same to @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+  config:
+    activate:
+      on-profile: integrate
