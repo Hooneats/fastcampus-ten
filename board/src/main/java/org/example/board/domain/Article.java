@@ -43,7 +43,7 @@ public class Article {
     private String hashtag; // 해시태그
 
     // 양방향
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 실무에서는 양방향을 잘 안쓴다. 예를 들어 게시글이 사라지면 댓글이 삭제되는게 맞지만, 운영상 백업 목벅으로 댓글을 남기고 싶을 떄도 있기에
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 실무에서는 양방향을 잘 안쓴다. 예를 들어 '게시글이 사라지면' 댓글이 삭제되는게 맞지만, 운영상 백업 목벅으로 댓글을 남기고 싶을 떄도 있기에
     @OrderBy("id")
     @ToString.Exclude // 순환참조 문제로 ToString 을 끊는다면 OneToMany 에서 끊는다.
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 중복 허용X

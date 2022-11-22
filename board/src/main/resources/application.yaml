@@ -7,7 +7,7 @@ logging:
   level:
     org.example.board: debug
     org.springframework.web.servlet: debug # request, response logging
-    org.hibernate.SQL: debug
+#    org.hibernate.SQL: debug # nested logging with -> org.hibernate.type.descriptor.sql.BasicBinder: trace
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
