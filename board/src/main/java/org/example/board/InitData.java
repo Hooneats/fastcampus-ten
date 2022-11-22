@@ -3,6 +3,7 @@ package org.example.board;
 import lombok.RequiredArgsConstructor;
 import org.example.board.domain.Article;
 import org.example.board.domain.ArticleComment;
+import org.example.board.domain.Hashtag;
 import org.example.board.domain.UserAccount;
 import org.example.board.repository.ArticleCommentRepository;
 import org.example.board.repository.ArticleRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 @Profile({"local","test"})
@@ -54,13 +56,21 @@ public class InitData {
 
     private  List<Article> createArticlesDummyData(List<UserAccount> savedUserAccounts) {
         final List<Article> articles = new ArrayList<>();
+        List<Hashtag> hashtags = createHashtagDummyData();
+        Random random = new Random();
         IntStream.range(0, 30)
-                .forEach(num ->
-                        articles.add(
-                                Article.of(savedUserAccounts.get(0),"new Article" + num, "new Content" + num, "#spring")
-                        )
-                );
+                .forEach(num -> {
+                    Article article = Article.of(savedUserAccounts.get(0), "new Article" + num, "new Content" + num);
+                    int randomIndex = random.nextInt(3);
+                    article.addHashtag(hashtags.get(randomIndex));
+                    articles.add(article);
+                });
         return articles;
+    }
+
+    private List<Hashtag> createHashtagDummyData() {
+        List<Hashtag> hashtags = List.of(Hashtag.of("#java"), Hashtag.of("spring"), Hashtag.of("boot"), Hashtag.of("jpa"));
+        return hashtags;
     }
 
     private  List<ArticleComment> createArticleCommentsDummyData(List<Article> savedArticles, List<UserAccount> savedUserAccounts) {

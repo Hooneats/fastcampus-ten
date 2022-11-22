@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -19,7 +20,6 @@ import java.util.Set;
 @ToString
 @Table(indexes = {
         @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
@@ -43,8 +43,14 @@ public class Article extends AuditingFields {
     @Column(nullable = false, length = 10000)
     private String content; // 본문
 
-    @Setter
-    private String hashtag; // 해시태그
+    @ToString.Exclude
+    @JoinTable(
+            name = "article_hashtag",
+            joinColumns = @JoinColumn(name = "articleId"), // article 의 id
+            inverseJoinColumns = @JoinColumn(name = "hashtagId") // 매핑할 hashtag 의 id
+    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Hashtag> hashtags = new LinkedHashSet<>();
 
     // 양방향
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) // 실무에서는 양방향을 잘 안쓴다. 예를 들어 '게시글이 사라지면' 댓글이 삭제되는게 맞지만, 운영상 백업 목벅으로 댓글을 남기고 싶을 떄도 있기에
@@ -56,16 +62,27 @@ public class Article extends AuditingFields {
     // 치환되는 방식 @Embedded
     // 상속 방식 @MappedSuperClass
 
-    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
     }
 
     // 팩토리 메서드 패턴 (보통 여러 매개변수로 할 경우 메서드 이름으로 of 를 사용)
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {
+        return new Article(userAccount, title, content);
+    }
+
+    public void addHashtag(Hashtag hashtag) {
+        this.getHashtags().add(hashtag);
+    }
+
+    public void addHashtags(Collection<Hashtag> hashtags) {
+        this.getHashtags().addAll(hashtags);
+    }
+
+    public void clearHashtags() {
+        this.getHashtags().clear();
     }
 
     /**

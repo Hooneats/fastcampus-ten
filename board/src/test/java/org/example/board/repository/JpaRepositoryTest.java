@@ -3,11 +3,11 @@ package org.example.board.repository;
 import org.example.board.InitData;
 import org.example.board.config.JpaConfig;
 import org.example.board.domain.Article;
+import org.example.board.domain.Hashtag;
 import org.example.board.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -58,7 +58,7 @@ class JpaRepositoryTest {
         //Given
         final UserAccount userAccount = userAccountRepository.findById("hooneats0").orElseThrow();
         final long previousCount = articleRepository.count();
-        final Article article = Article.of(userAccount, "new Content", "내용내용내용", "#spring");
+        final Article article = Article.of(userAccount, "new Content", "내용내용내용");
 
         //When
         articleRepository.save(article);
@@ -73,16 +73,20 @@ class JpaRepositoryTest {
     void givenTestData_whenUpdating_thenWorksFine() {
         //Given
         final Article article = articleRepository.findById(1L).orElseThrow();
-        final String updatedHashtag = "#SpringBoot";
-        article.setHashtag(updatedHashtag);
+        final Hashtag updatedHashtag = Hashtag.of("#SpringBoot");
+        article.addHashtag(updatedHashtag);
 
         //When
         final Article savedArticle = articleRepository.saveAndFlush(article); // 테스트는 @Transactional 로 인해 rollback 이 되기에
 //        articleRepository.flush();
 
         //Then
-        assertThat(savedArticle)
-                .hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
+//        assertThat(savedArticle)
+//                .hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
+        assertThat(savedArticle.getHashtags())
+                .map(Hashtag::getHashtagName)
+                .asList()
+                .containsAnyOf(updatedHashtag.getHashtagName());
     }
 
     @DisplayName("delete test")

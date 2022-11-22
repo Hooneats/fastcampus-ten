@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 
 /**
- * decoupled 기능
+ * decoupled 기능 ~th.xml
  * -> 서버가 없이(작동 안할 때) 순수 html 작동하도록 디자인 따로 관리
  */
 @Configuration
