@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@ActiveProfiles("ArticleControllerTest") // 단순 view 테스트여서 더미데이터 필요치 않음
 @DisplayName("View 컨트롤러 - 게시글")
 @Import(SecurityConfig.class)
 @WebMvcTest(ArticleController.class) // @WebMvcTest 는 따로 컨트롤러 지정안하면 모든 컨틀롤러를 읽기에 지정해주자

@@ -1,6 +1,6 @@
 <!--decoupled 기능-->
 <?xml version="1.0" encoding="UTF-8" ?>
 <thlogic>
-    <attr sel="#header"  th:replace="~{header :: header}"/>
+    <attr sel="#header"  th:replace="~{header :: #th-header}"/> <!-- 경로 :: 경로안의 (html) 엘리먼트 -->
     <attr sel="footer"   th:replace="~{footer :: #th-footer}"/>
 </thlogic>
