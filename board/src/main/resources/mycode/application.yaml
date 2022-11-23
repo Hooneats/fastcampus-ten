@@ -1,0 +1,72 @@
+spring:
+  profiles:
+    active: local
+    include:
+      - logging
+      - thymeleaf
+      - data-rest
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/board
+    username: hooneats
+    password: hooneats # TODO : we need to encryption
+    driver-class-name: com.mysql.cj.jdbc.Driver # mysql version is higher than 8
+  jpa:
+    database: mysql # mysql dialect
+    defer-datasource-initialization: true # this defer-DB(test db), use for higher than version spring boot 2.5
+    hibernate.ddl-auto: create
+    open-in-view: false # 서비스의 트랜젝션 범위를 넘어선 응답 interceptor 까지 jpa 의 영속성 컨텍스트가 살아있다 때문에 false 를 사용하자
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+  sql.init.mode: always # test data insert initialization by resources.data.sql
+
+---
+spring:
+  config:
+    activate:
+      on-profile: logging
+
+# debug is Enable debug logs --> true is spring boot logs but too many so this project false
+debug: false
+
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    org.example.board: debug
+    org.springframework.web.servlet: debug # request, response logging
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+---
+spring:
+  config:
+    activate:
+      on-profile: thymeleaf
+
+  thymeleaf.cache: false # for devtools
+  thymeleaf3: # custom configuration
+    decoupled-logic: true # spring-boot-configuration-processor
+
+---
+spring:
+  config:
+    activate:
+      on-profile: data-rest
+
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated
+
+---
+spring:
+  config:
+    activate:
+      on-profile: integrate

@@ -1,72 +1,59 @@
-spring:
-  profiles:
-    active: local
-    include:
-      - logging
-      - thymeleaf
-      - data-rest
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/board
-    username: hooneats
-    password: hooneats # TODO : we need to encryption
-    driver-class-name: com.mysql.cj.jdbc.Driver # mysql version is higher than 8
-  jpa:
-    database: mysql # mysql dialect
-#    defer-datasource-initialization: true # this defer-DB(test db), use for higher than version spring boot 2.5
-    hibernate.ddl-auto: create
-    open-in-view: false
-    properties:
-      hibernate.format_sql: true
-      hibernate.default_batch_fetch_size: 100
-#  sql.init.mode: always # test data insert initialization by resources.data.sql
-
----
-spring:
-  config:
-    activate:
-      on-profile: logging
-
-# debug is Enable debug logs --> true is spring boot logs but too many so this project false
 debug: false
-
 management.endpoints.web.exposure.include: "*"
 
 logging:
   level:
-    org.example.board: debug
-    org.springframework.web.servlet: debug # request, response logging
-    org.hibernate.SQL: debug
+    com.fastcampus.projectboard: debug
+    org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
----
 spring:
-  config:
-    activate:
-      on-profile: thymeleaf
-
-  thymeleaf.cache: false # for devtools
-  thymeleaf3: # custom configuration
-    decoupled-logic: true # spring-boot-configuration-processor
-
----
-spring:
-  config:
-    activate:
-      on-profile: data-rest
-
+  datasource:
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+  sql.init.mode: always
   data.rest:
     base-path: /api
     detection-strategy: annotated
+  thymeleaf3.decoupled-logic: true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_OAUTH_CLIENT_ID}
+            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 ---
+
 spring:
-  config:
-    activate:
-      on-profile: integrate
+  config.activate.on-profile: heroku
+  datasource:
+    url: ${JAWSDB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa.hibernate.ddl-auto: create
+  sql.init.mode: always
+
+---
+
+spring:
+  config.activate.on-profile: test
+  datasource.url: jdbc:h2:mem:testdb

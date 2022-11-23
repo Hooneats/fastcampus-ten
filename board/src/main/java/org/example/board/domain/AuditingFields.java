@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @ToString
-@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditingFields { // 상속으로 사용할 클래스이기에 의미상 abstract 가 더 잘 드러난다.
+@MappedSuperclass
+public abstract class AuditingFields {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
@@ -37,4 +37,5 @@ public abstract class AuditingFields { // 상속으로 사용할 클래스이기
     @LastModifiedBy
     @Column(nullable = false, length = 100)
     protected String modifiedBy; // 수정자
+
 }

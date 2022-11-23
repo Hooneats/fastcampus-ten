@@ -1,19 +1,18 @@
 package org.example.board;
 
 import lombok.RequiredArgsConstructor;
-import org.example.board.domain.Article;
-import org.example.board.domain.ArticleComment;
-import org.example.board.domain.Hashtag;
-import org.example.board.domain.UserAccount;
-import org.example.board.repository.ArticleCommentRepository;
-import org.example.board.repository.ArticleRepository;
-import org.example.board.repository.UserAccountRepository;
+import org.example.mycode.domain.Article;
+import org.example.mycode.domain.ArticleComment;
+import org.example.mycode.domain.Hashtag;
+import org.example.mycode.domain.UserAccount;
+import org.example.mycode.repository.ArticleCommentRepository;
+import org.example.mycode.repository.ArticleRepository;
+import org.example.mycode.repository.UserAccountRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

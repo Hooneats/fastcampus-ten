@@ -1,108 +1,221 @@
 package org.example.board.repository;
 
-import org.example.board.InitData;
-import org.example.board.config.JpaConfig;
 import org.example.board.domain.Article;
+import org.example.board.domain.ArticleComment;
 import org.example.board.domain.Hashtag;
 import org.example.board.domain.UserAccount;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test") // test 모듈에 application-test.properties
 @DisplayName("JPA 연결 테스트")
-@Import({JpaConfig.class, InitData.class}) // auditing 기능, dummy data
-@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다. 스프링 부트가 자동으로 인메모리를 만들지 않고 설정파일기준으로 만들기 위해 @AutoConfigureTestDatabase 사용
+@Import(JpaRepositoryTest.TestJpaConfig.class)
+@DataJpaTest
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
     private final UserAccountRepository userAccountRepository;
+    private final HashtagRepository hashtagRepository;
 
-    // JUNIT 5 와 최신의 스프링부트는 테스트에서도 생성자 주입 가능
-    //  --> @DataJpaTest 안에 @ExtendWith(SpringExtension.class) 안에 @Autowired 관련 로직 있다.
     JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository,
-            @Autowired UserAccountRepository userAccountRepository
-            ) {
+            @Autowired UserAccountRepository userAccountRepository,
+            @Autowired HashtagRepository hashtagRepository
+    ) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
         this.userAccountRepository = userAccountRepository;
+        this.hashtagRepository = hashtagRepository;
     }
 
-    @DisplayName("Select test")
+    @DisplayName("select 테스트")
     @Test
     void givenTestData_whenSelecting_thenWorksFine() {
-        //Given
+        // Given
 
-        //When
-        final List<Article> articles = articleRepository.findAll();
+        // When
+        List<Article> articles = articleRepository.findAll();
 
-        //Then
+        // Then
         assertThat(articles)
                 .isNotNull()
-                .hasSize(30);
+                .hasSize(123); // classpath:resources/data.sql 참조
     }
 
-    @DisplayName("Insert test")
+    @DisplayName("insert 테스트")
     @Test
     void givenTestData_whenInserting_thenWorksFine() {
-        //Given
-        final UserAccount userAccount = userAccountRepository.findById("hooneats0").orElseThrow();
-        final long previousCount = articleRepository.count();
-        final Article article = Article.of(userAccount, "new Content", "내용내용내용");
+        // Given
+        long previousCount = articleRepository.count();
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("newUno", "pw", null, null, null));
+        Article article = Article.of(userAccount, "new article", "new content");
+        article.addHashtags(Set.of(Hashtag.of("spring")));
 
-        //When
+        // When
         articleRepository.save(article);
 
-        //Then
-        assertThat(articleRepository.count())
-                .isEqualTo(previousCount + 1);
+        // Then
+        assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
     }
 
-    @DisplayName("update test")
+    @DisplayName("update 테스트")
     @Test
     void givenTestData_whenUpdating_thenWorksFine() {
-        //Given
-        final Article article = articleRepository.findById(1L).orElseThrow();
-        final Hashtag updatedHashtag = Hashtag.of("#SpringBoot");
-        article.addHashtag(updatedHashtag);
+        // Given
+        Article article = articleRepository.findById(1L).orElseThrow();
+        Hashtag updatedHashtag = Hashtag.of("springboot");
+        article.clearHashtags();
+        article.addHashtags(Set.of(updatedHashtag));
 
-        //When
-        final Article savedArticle = articleRepository.saveAndFlush(article); // 테스트는 @Transactional 로 인해 rollback 이 되기에
-//        articleRepository.flush();
+        // When
+        Article savedArticle = articleRepository.saveAndFlush(article);
 
-        //Then
-//        assertThat(savedArticle)
-//                .hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
+        // Then
         assertThat(savedArticle.getHashtags())
-                .map(Hashtag::getHashtagName)
-                .asList()
-                .containsAnyOf(updatedHashtag.getHashtagName());
+                .hasSize(1)
+                .extracting("hashtagName", String.class)
+                        .containsExactly(updatedHashtag.getHashtagName());
     }
 
-    @DisplayName("delete test")
+    @DisplayName("delete 테스트")
     @Test
     void givenTestData_whenDeleting_thenWorksFine() {
-        //Given
-        final Article article = articleRepository.findById(1L).orElseThrow();
-        final long previousArticleCount = articleRepository.count();
-        final long previousArticleCommentCount = articleCommentRepository.count();
-        final int deletedCommentsSize = article.getArticleComments().size(); // caseCade 에 의해
+        // Given
+        Article article = articleRepository.findById(1L).orElseThrow();
+        long previousArticleCount = articleRepository.count();
+        long previousArticleCommentCount = articleCommentRepository.count();
+        int deletedCommentsSize = article.getArticleComments().size();
 
-        //When
+        // When
         articleRepository.delete(article);
 
-        //Then
+        // Then
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
-        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize );
+        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
     }
+
+    @DisplayName("대댓글 조회 테스트")
+    @Test
+    void givenParentCommentId_whenSelecting_thenReturnsChildComments() {
+        // Given
+
+        // When
+        Optional<ArticleComment> parentComment = articleCommentRepository.findById(1L);
+
+        // Then
+        assertThat(parentComment).get()
+                .hasFieldOrPropertyWithValue("parentCommentId", null)
+                .extracting("childComments", InstanceOfAssertFactories.COLLECTION)
+                .hasSize(4);
+    }
+
+    @DisplayName("댓글에 대댓글 삽입 테스트")
+    @Test
+    void givenParentComment_whenSaving_thenInsertsChildComment() {
+        // Given
+        ArticleComment parentComment = articleCommentRepository.getReferenceById(1L);
+        ArticleComment childComment = ArticleComment.of(
+                parentComment.getArticle(),
+                parentComment.getUserAccount(),
+                "대댓글"
+        );
+
+        // When
+        parentComment.addChildComment(childComment);
+        articleCommentRepository.flush();
+
+        // Then
+        assertThat(articleCommentRepository.findById(1L)).get()
+                .hasFieldOrPropertyWithValue("parentCommentId", null)
+                .extracting("childComments", InstanceOfAssertFactories.COLLECTION)
+                .hasSize(5);
+    }
+
+    @DisplayName("댓글 삭제와 대댓글 전체 연동 삭제 테스트")
+    @Test
+    void givenArticleCommentHavingChildComments_whenDeletingParentComment_thenDeletesEveryComment() {
+        // Given
+        ArticleComment parentComment = articleCommentRepository.getReferenceById(1L);
+        long previousArticleCommentCount = articleCommentRepository.count();
+
+        // When
+        articleCommentRepository.delete(parentComment);
+
+        // Then
+        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - 5); // 테스트 댓글 + 대댓글 4개
+    }
+
+    @DisplayName("댓글 삭제와 대댓글 전체 연동 삭제 테스트 - 댓글 ID + 유저 ID")
+    @Test
+    void givenArticleCommentIdHavingChildCommentsAndUserId_whenDeletingParentComment_thenDeletesEveryComment() {
+        // Given
+        long previousArticleCommentCount = articleCommentRepository.count();
+
+        // When
+        articleCommentRepository.deleteByIdAndUserAccount_UserId(1L, "uno");
+
+        // Then
+        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - 5); // 테스트 댓글 + 대댓글 4개
+    }
+
+    @DisplayName("[Querydsl] 전체 hashtag 리스트에서 이름만 조회하기")
+    @Test
+    void givenNothing_whenQueryingHashtags_thenReturnsHashtagNames() {
+        // Given
+
+        // When
+        List<String> hashtagNames = hashtagRepository.findAllHashtagNames();
+
+        // Then
+        assertThat(hashtagNames).hasSize(19);
+    }
+
+    @DisplayName("[Querydsl] hashtag로 페이징된 게시글 검색하기")
+    @Test
+    void givenHashtagNamesAndPageable_whenQueryingArticles_thenReturnsArticlePage() {
+        // Given
+        List<String> hashtagNames = List.of("blue", "crimson", "fuscia");
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(
+                Sort.Order.desc("hashtags.hashtagName"),
+                Sort.Order.asc("title")
+        ));
+
+        // When
+        Page<Article> articlePage = articleRepository.findByHashtagNames(hashtagNames, pageable);
+
+        // Then
+        assertThat(articlePage.getContent()).hasSize(pageable.getPageSize());
+        assertThat(articlePage.getContent().get(0).getTitle()).isEqualTo("Fusce posuere felis sed lacus.");
+        assertThat(articlePage.getContent().get(0).getHashtags())
+                .extracting("hashtagName", String.class)
+                        .containsExactly("fuscia");
+        assertThat(articlePage.getTotalElements()).isEqualTo(17);
+        assertThat(articlePage.getTotalPages()).isEqualTo(4);
+    }
+
+
+    @EnableJpaAuditing
+    @TestConfiguration
+    static class TestJpaConfig {
+        @Bean
+        AuditorAware<String> auditorAware() {
+            return () -> Optional.of("uno");
+        }
+    }
+
 }
