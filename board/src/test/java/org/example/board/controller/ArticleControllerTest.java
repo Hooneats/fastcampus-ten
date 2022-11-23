@@ -78,8 +78,8 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("paginationBarNumbers"))
                 .andExpect(model().attributeExists("searchTypes"))
                 .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
-        then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
-        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+        then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class)); // articleService.searchArticles 를 호출헀어야 한다. 검증
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt()); // paginationService.getPaginationBarNumbers 를 호출했어야 한다. 검증
     }
 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 검색어와 함께 호출")
