@@ -14,11 +14,14 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
+// Auditing 기능 따로 클래스로 뺐을 때
+// 치환되는 방식 @Embedded
+// 상속 방식 @MappedSuperClass
 @Getter
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class AuditingFields {
+public abstract class AuditingFields { // 상속으로 사용할 클래스이기에 의미상 abstract 가 더 잘 드러난다.
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate

@@ -15,6 +15,7 @@ import java.util.Optional;
 @Configuration
 public class JpaConfig {
 
+    //스프링 시큐리티로 인증 기능 연동
     @Bean
     public AuditorAware<String> auditorAware() {
         return () -> Optional.ofNullable(SecurityContextHolder.getContext())

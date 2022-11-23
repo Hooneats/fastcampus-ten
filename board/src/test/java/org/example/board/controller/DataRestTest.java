@@ -14,10 +14,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// SpringBootTest 로 yml 에 파일에 초기 데이터 들어가게 설정했기에 ( // data-rest 테스트여서 더미 데이터 들어가야함 )
+//@WebMvcTest // @WebMvcTest 는 슬라이스 테스트로 컨트롤러외의 빈을 로드하지 않는다 때문에 data rest 의 빈을 읽지 않기에 통합테스트 @SpringBootTest 사용
 @Disabled("Spring Data REST 통합테스트는 불필요하므로 제외시킴")
 @DisplayName("Data REST - API 테스트")
-@Transactional
-@AutoConfigureMockMvc
+@Transactional // data-rest 통합테스트여서 데이터가 DB 에 들어가게된다. 때문에 테스트이기에 @Transactional 을 넣어줘 롤백되게 하자
+@AutoConfigureMockMvc // @WebMvcTest 가 아닌 @SpringBootTest 는 webEnvironment = SpringBootTest.WebEnvironment.MOCK 목 까지는 불러오나 MockMvc 는 따로 넣어줘야하기에
 @SpringBootTest
 class DataRestTest {
 

@@ -22,8 +22,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA 연결 테스트")
-@Import(JpaRepositoryTest.TestJpaConfig.class)
-@DataJpaTest
+@Import(JpaRepositoryTest.TestJpaConfig.class) // auditing 기능
+@DataJpaTest // @DataJpaTest 안에 @Transactional 있다. 또한 자동으로 in-memory db 를 사용한다. 이때 만약 스프링 부트가 자동으로 인메모리를 만들지 않기를 바라면 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) 추가해 사용할 수 있다.
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
@@ -31,6 +31,8 @@ class JpaRepositoryTest {
     private final UserAccountRepository userAccountRepository;
     private final HashtagRepository hashtagRepository;
 
+    // JUNIT 5 와 최신의 스프링부트는 테스트에서도 생성자 주입 가능
+    //  --> @DataJpaTest 안에 @ExtendWith(SpringExtension.class) 안에 @Autowired 관련 로직 있다.
     JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository,

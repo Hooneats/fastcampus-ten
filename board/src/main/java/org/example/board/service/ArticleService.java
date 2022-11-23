@@ -39,6 +39,7 @@ public class ArticleService {
             return articleRepository.findAll(pageable).map(ArticleDto::from);
         }
 
+        // 스위치문 자바 12, 13 이후 아래 처럼 Expression(하나의 값으로 도출된다.) 으로 표현 가능
         return switch (searchType) {
             case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
@@ -77,6 +78,9 @@ public class ArticleService {
 
     public void updateArticle(Long articleId, ArticleDto dto) {
         try {
+            // TODO : getReferenceById 는 기존에 findById 는 DB 에서 영속성 컨텍스트에 객체를 가져와야하지만 이러한 쿼리를 날리지 않고 영속성 컨텍스트에 넣는 방법이다. -> 이전 버전은 getOne()[deprecated]
+            //  -> 즉 select 쿼리를 날리지 않고 update 쿼리만 결국 날라가게 만든다.
+            //  -> 그 후 동작 방식은 똑같다 처음 select 쿼리만 날리지 않을 뿐 변경감지 적용해 update 날린다.
             Article article = articleRepository.getReferenceById(articleId);
             UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
 

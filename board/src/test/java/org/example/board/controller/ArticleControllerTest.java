@@ -42,13 +42,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("View 컨트롤러 - 게시글")
 @Import({TestSecurityConfig.class, FormDataEncoder.class})
-@WebMvcTest(ArticleController.class)
+@WebMvcTest(ArticleController.class) // @WebMvcTest 는 따로 컨트롤러 지정안하면 모든 컨틀롤러를 읽기에 지정해주자
 class ArticleControllerTest {
 
     private final MockMvc mvc;
 
     private final FormDataEncoder formDataEncoder;
 
+    // @MockBean 컨트롤러에서 사용중인 Service 계층에 연결을 끊기 위해 사용하는 것이 MockBean -> 이는 spring 에서 제공하는 것이고 내부구조는 모키토의 Mock 과 같다.
     @MockBean private ArticleService articleService;
     @MockBean private PaginationService paginationService;
 
@@ -72,6 +73,7 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles"))
                 .andExpect(status().isOk())
+                //.andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))  // 기대는 'text/html' 지만 실제는 'text/html;charset=UTF-8' 따라서 호환되는 타입까지 열어주는 contentTypeCompatibleWith() 사용
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/index"))
                 .andExpect(model().attributeExists("articles"))

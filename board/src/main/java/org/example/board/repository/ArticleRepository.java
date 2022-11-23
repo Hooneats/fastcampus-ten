@@ -20,6 +20,7 @@ public interface ArticleRepository extends
         QuerydslPredicateExecutor<Article>,
         QuerydslBinderCustomizer<QArticle> {
 
+    // 부분 매칭을 위해 Containing 사용
     Page<Article> findByTitleContaining(String title, Pageable pageable);
     Page<Article> findByContentContaining(String content, Pageable pageable);
     Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
@@ -31,7 +32,8 @@ public interface ArticleRepository extends
     default void customize(QuerydslBindings bindings, QArticle root) {
         bindings.excludeUnlistedProperties(true);
         bindings.including(root.title, root.content, root.hashtags, root.createdAt, root.createdBy);
-        bindings.bind(root.title).first(StringExpression::containsIgnoreCase);
+        // bindings.bind(root.title).first(StringExpression::likeIgnoreCase); // likeIgnoreCase 대소문자 구분없이 like '${v} -> % 넣는것을 해줘야함
+        bindings.bind(root.title).first(StringExpression::containsIgnoreCase); // containsIgnoreCase 대소문자 구분없이 like '%${v}%'
         bindings.bind(root.content).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.hashtags.any().hashtagName).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);

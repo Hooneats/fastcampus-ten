@@ -39,7 +39,8 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
 
-    @InjectMocks private ArticleService sut;
+    // 목 객체를 넣어줘야할 대상
+    @InjectMocks private ArticleService sut; //system under test -> 테스트 해야할 대상
 
     @Mock private HashtagService hashtagService;
     @Mock private ArticleRepository articleRepository;
@@ -58,7 +59,7 @@ class ArticleServiceTest {
 
         // Then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findAll(pageable);
+        then(articleRepository).should().findAll(pageable); // findAll 호출 하였는가(실행했는가)
     }
 
     @DisplayName("검색어와 함께 게시글을 검색하면, 게시글 페이지를 반환한다.")
