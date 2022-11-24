@@ -12,10 +12,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * UserDetails 를 구현시 Security 클래스 User 를 참고하면 좋다
+ */
 public record BoardPrincipal(
-        String username,
+        String username, // userId
         String password,
-        Collection<? extends GrantedAuthority> authorities,
+        Collection<? extends GrantedAuthority> authorities, //권한
         String email,
         String nickname,
         String memo,
@@ -35,7 +38,7 @@ public record BoardPrincipal(
                 password,
                 roleTypes.stream()
                         .map(RoleType::getName)
-                        .map(SimpleGrantedAuthority::new)
+                        .map(SimpleGrantedAuthority::new) //GrantedAuthority 의 기본 구현체 SimpleGrantedAuthority
                         .collect(Collectors.toUnmodifiableSet())
                 ,
                 email,
@@ -66,6 +69,7 @@ public record BoardPrincipal(
     }
 
 
+    // UserDetails 에 대한 오버라이딩 start
     @Override public String getUsername() { return username; }
     @Override public String getPassword() { return password; }
     @Override public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
@@ -74,12 +78,13 @@ public record BoardPrincipal(
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
+    // UserDetails 에 대한 오버라이딩 ---- End
 
     @Override public Map<String, Object> getAttributes() { return oAuth2Attributes; }
     @Override public String getName() { return username; }
 
     public enum RoleType {
-        USER("ROLE_USER");
+        USER("ROLE_USER"); // SpringSecurity 에서 제공하는 규칙 '_' 변경할 수도 있지만 굳이?!
 
         @Getter private final String name;
 

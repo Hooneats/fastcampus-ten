@@ -16,7 +16,7 @@ public class TestSecurityConfig {
 
     @MockBean private UserAccountService userAccountService;
 
-    @BeforeTestMethod
+    @BeforeTestMethod // Security 는 스프링과 관련이 있기에 Spring 어노테이션인 @BeforeTestMethod 를 사용
     public void securitySetUp() {
         given(userAccountService.searchUser(anyString()))
                 .willReturn(Optional.of(createUserAccountDto()));

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -38,14 +39,14 @@ public class SecurityConfig {
     ) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .mvcMatchers(
-                                HttpMethod.GET,
-                                "/",
-                                "/articles",
-                                "/articles/search-hashtag"
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 열어준다.
+                        .mvcMatchers( // mvcMatchers 는 기존의 antMatchers 보다 스프링의 여러가지 패턴 매칭 기능을 더 제공해준다.
+                                HttpMethod.GET, // GET 맵핑에 대해
+                                "/", // 루트 페이지
+                                "/articles", // article 페이지
+                                "/articles/search-hashtag" // article 의 hashtag 페이지
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // 다른 리퀘스트는 인증 검사해라
                 )
                 .formLogin(withDefaults())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
@@ -57,6 +58,16 @@ public class SecurityConfig {
                 .build();
     }
 
+//    기존 방식의 정적 리소스를 열어준다.
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        // static : resource, css - js
+//        // return web -> web.ignoring().antMatchers("/css");
+//        // 스프링이 정적 리소스를 담는 위치를 간단하게 제공해준다.
+//        return web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//    } // ----> 이러한 설정은 권장하지 않는다 그 이유는 정적 리소스 쪽에 보안적용이 안되기 때문이다. 때문에 이러한 부분도 securityFilterChain 에서 사용하라
+
+    // 사용자 인증 정보를 가져오는 @Bean UserDetailsService 에서 UserDetails 를 가져와야한다.
     @Bean
     public UserDetailsService userDetailsService(UserAccountService userAccountService) {
         return username -> userAccountService

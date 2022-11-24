@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
 
+    // 클래스를 알기에 QueryDsl 을 사용할 때 기본생성자로 가자
     public ArticleRepositoryCustomImpl() {
         super(Article.class);
     }

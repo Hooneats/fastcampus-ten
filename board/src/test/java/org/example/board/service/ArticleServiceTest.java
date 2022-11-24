@@ -90,6 +90,7 @@ class ArticleServiceTest {
 
         // Then
         assertThat(articles).isEqualTo(Page.empty(pageable));
+        // null 인경우 다른 호출 없이 빈페이지 반환하므로
         then(hashtagRepository).shouldHaveNoInteractions();
         then(articleRepository).shouldHaveNoInteractions();
     }

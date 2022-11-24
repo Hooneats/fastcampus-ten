@@ -24,7 +24,7 @@ class FormDataEncoderTest {
         this.formDataEncoder = formDataEncoder;
     }
 
-    @DisplayName("객체를 넣으면, url encoding 된 form body data 형식의 문자열을 돌려준다.")
+    @DisplayName("객체를 넣으면, url encoding 된 미디어 타입 form 형태의 body data 형식의 문자열을 돌려준다.")
     @Test
     void givenObject_whenEncoding_thenReturnsFormEncodedString() {
         // Given
@@ -44,6 +44,10 @@ class FormDataEncoderTest {
         String result = formDataEncoder.encode(obj);
 
         // Then
+        /**
+         * form 데이터의 포멧이다. POST 형태로 데이터를 전송할때 자동으로 바디부분에 들어가는 문자열 예시 형태이다.
+         * 이러한 형태를 자동으로 만들어주는 것을 찾기힘들어 FormDataEncoder 를 만들었다.
+         */
         assertThat(result).isEqualTo(
                 "str=This%20'is'%20%22test%22%20string." +
                         "&listStr1=%5Bhello,my,friend%5D" +

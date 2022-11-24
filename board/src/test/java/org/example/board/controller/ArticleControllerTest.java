@@ -49,7 +49,8 @@ class ArticleControllerTest {
 
     private final FormDataEncoder formDataEncoder;
 
-    // @MockBean 컨트롤러에서 사용중인 Service 계층에 연결을 끊기 위해 사용하는 것이 MockBean -> 이는 spring 에서 제공하는 것이고 내부구조는 모키토의 Mock 과 같다.
+    // @MockBean 컨트롤러에서 사용중인 Service 계층에 연결을 끊기 위해 사용하는 것이 MockBean(MockBean 과 InjectMock 은 생성자 주입이 안된다.)
+    //              -> 이는 spring 에서 제공하는 것이고 내부구조는 모키토의 Mock 과 같다.
     @MockBean private ArticleService articleService;
     @MockBean private PaginationService paginationService;
 
@@ -90,6 +91,7 @@ class ArticleControllerTest {
         // Given
         SearchType searchType = SearchType.TITLE;
         String searchValue = "title";
+        // eq 를 통해 String 을 matcher 로 잡아주자
         given(articleService.searchArticles(eq(searchType), eq(searchValue), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
@@ -146,12 +148,12 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles/" + articleId))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrlPattern("**/login")); // redirectedUrl 은 pull Url 이기에 Pattern 사용
         then(articleService).shouldHaveNoInteractions();
         then(articleService).shouldHaveNoInteractions();
     }
 
-    @WithMockUser
+    @WithMockUser // 유저를 Mocking 해 준다. 단 @WithMockUser 는 게시글 추가,삭제등 중요한 인증이 필요한 시점에 실제 인증기능이 아닌 Mock 이기에 주의하자 --> 이경우에는 @WithUserDetails 를 사용하자
     @DisplayName("[view][GET] 게시글 페이지 - 정상 호출, 인증된 사용자")
     @Test
     void givenAuthorizedUser_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
@@ -251,6 +253,7 @@ class ArticleControllerTest {
                 .andExpect(model().attribute("formStatus", FormStatus.CREATE));
     }
 
+    // @WithUserDetails 구현한 실제 빈을 사용하기에 ,유저 정보가 실제 DB 에 있어야한다. --> UserDetailsService 를 사용할테지만 우리는 TestSecurityConfig 에서 기능을 목으로 만들었기에 unoTest 계정으로 가능
     @WithUserDetails(value = "unoTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view][POST] 새 게시글 등록 - 정상 호출")
     @Test

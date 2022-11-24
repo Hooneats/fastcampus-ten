@@ -85,7 +85,7 @@ public class ArticleController {
 
     @PostMapping("/form")
     public String postNewArticle(
-            @AuthenticationPrincipal BoardPrincipal boardPrincipal,
+            @AuthenticationPrincipal BoardPrincipal boardPrincipal, //SecurityContextHolder.getContext() 로 Principal 정보를 불러오는 것과 같다.
             ArticleRequest articleRequest
     ) {
         articleService.saveArticle(articleRequest.toDto(boardPrincipal.toDto()));

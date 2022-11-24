@@ -43,7 +43,7 @@ spring:
             user-name-attribute: id
 
 ---
-
+# heroku 로 profile 을 주면 중복되는 내용은 아래로 적용한다.
 spring:
   config.activate.on-profile: heroku
   datasource:
