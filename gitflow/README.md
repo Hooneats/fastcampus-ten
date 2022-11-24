@@ -9,3 +9,4 @@
 - release/1.0.0 에 feature/find_pw 병합
 ---
 - release 작업 완료 main 브랜치에 머지
+- main 운영 배포 완료(가정)
