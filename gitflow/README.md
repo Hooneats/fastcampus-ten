@@ -10,3 +10,5 @@
 ---
 - release 작업 완료 main 브랜치에 머지
 - main 운영 배포 완료(가정)
+---
+- main 과의 싱크를 맞추기 위해 dev 에 main 머지
