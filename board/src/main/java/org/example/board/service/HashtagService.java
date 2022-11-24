@@ -36,10 +36,11 @@ public class HashtagService {
             result.add(matcher.group().replace("#", ""));
         }
 
-        return Set.copyOf(result);
+        return Set.copyOf(result); // 불변객체로 리턴하기위해 Set.copyOf() 사용
     }
 
     public void deleteHashtagWithoutArticles(Long hashtagId) {
+        // Hashtag 는 다른 게시글에서 재사용할 수 있기에 articles 가(사용하고 있는곳이 없다는 뜻) 정확히 비어있어야 Hashtag 를 비로서 지운다.
         Hashtag hashtag = hashtagRepository.getReferenceById(hashtagId);
         if (hashtag.getArticles().isEmpty()) {
             hashtagRepository.delete(hashtag);

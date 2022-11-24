@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+// 정렬은 TreeSet
 public record ArticleWithCommentsResponse(
         Long id,
         String title,

@@ -34,12 +34,13 @@ public class Article extends AuditingFields {
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문
 
     @ToString.Exclude
-    @JoinTable(
+    @JoinTable( // @ManyToMany 는 DB 에 드러나지 않는 테이블이 생기고 이 테이블을 직접 컨트롤할 수 없기에 실무에서는 @ManyToMany 보다는 실제 테이블을 하나 만들어 @OneToMany, @ManyToOne 를 사용한다.
             name = "article_hashtag",
             joinColumns = @JoinColumn(name = "articleId"), // article 의 id
             inverseJoinColumns = @JoinColumn(name = "hashtagId") // 매핑할 hashtag 의 id
     )
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // PERSIST 는 Insert , MERGE 는 update 이다.
+        // -> Hashtag 는 name 이 unique 로 하나의 Hashtag 를 여러게시글에서 사용할 수 있기에 Delete 는 해주지 않았다.
     private Set<Hashtag> hashtags = new LinkedHashSet<>();
 
 
@@ -88,6 +89,9 @@ public class Article extends AuditingFields {
         return this.getId() != null && this.getId().equals(that.getId()); // 영속화한 객체 즉, id 있는 것들만 비교대상이기에 'id != null &&' 추가
     }
 
+    // 스프링 데이터 JPA 로 엔티티를 다룰때, 엔티티 데이터는 하이버네이트 구현체가 만든 프록시 객체를 이용하여 지연 로딩될 수 있다.
+    // 따라서 엔티티를 조회할 때 필드에 직접 접근하면 'ex) id == null' 인 상황이 있을 수 있고, 이러면 올바른 비교를 하지 못하게 된다.
+    // Equals & HashCode 에서도 getter 를 사용하면 지연로딩에 대한 문제를 해결할 수 있다.
     @Override
     public int hashCode() {
         return Objects.hash(this.getId());

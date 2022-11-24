@@ -85,6 +85,7 @@ public class ArticleService {
             UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
 
             if (article.getUserAccount().equals(userAccount)) {
+                // 해시태그를 완전 다 지운후 다시 추가하는 로직 -> 성능이나 효율은 생각하지 않은 로직이다.
                 if (dto.title() != null) { article.setTitle(dto.title()); }
                 if (dto.content() != null) { article.setContent(dto.content()); }
 
@@ -143,6 +144,7 @@ public class ArticleService {
                 .collect(Collectors.toUnmodifiableSet());
 
         hashtagNamesInContent.forEach(newHashtagName -> {
+            // 새로 넣을 Hashtag 가 DB 에 없는경우에 넣어준다.
             if (!existingHashtagNames.contains(newHashtagName)) {
                 hashtags.add(Hashtag.of(newHashtagName));
             }
