@@ -42,3 +42,4 @@
 ---
 - main 과의 싱크를 맞추기 위해 dev 에  main 머지
 ---
+- hotfix 최종 완료 이전에 생성되었던 feature(최신 main 과의 싱크를 맞춘 dev 에서 출발한 feature 가 아닌 경우) dev 브랜치 pull 시행필요 
