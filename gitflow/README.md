@@ -22,3 +22,5 @@
 - feature/login 기능 구현
 - feature/logout 기능 구현
 - dev 작업 완료(feature/login , feature/logout 병합)
+---
+- release/2.0.0 브랜치 생성
