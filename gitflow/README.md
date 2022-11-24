@@ -36,3 +36,6 @@
 - main 브랜치에서 빠르게 처리할 hotfix 브랜치 생성
 ---
 - hotfix 기능 구현
+---
+- hotfix 를 main 브랜치에 머지
+- main 운영 배포 완료(가정)
