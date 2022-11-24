@@ -29,3 +29,10 @@
 - main 운영 배포 완료(가정)
 ---
 - main 과의 싱크를 맞추기 위해 dev 에 main 머지
+
+---
+
+### hotfix) Hotfix 가 필요한 경우
+- main 브랜치에서 빠르게 처리할 hotfix 브랜치 생성
+---
+- hotfix 기능 구현
