@@ -1,5 +1,6 @@
 # GetFlow
 
+v1) release 브랜치 생성 후 추가적인 작업 필요한 경우
 - dev 브랜치 생성
 - login 기능 구현
 - logout 기능 구현
