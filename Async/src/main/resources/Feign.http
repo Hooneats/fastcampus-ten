@@ -1,0 +1,5 @@
+GET {{host}}/get
+###
+POST {{host}}/post
+###
+GET {{host}}/error
