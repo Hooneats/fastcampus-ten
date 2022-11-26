@@ -1,4 +1,4 @@
-package org.example.async.feign.common.dto;
+package org.example.feign.fclient.common.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

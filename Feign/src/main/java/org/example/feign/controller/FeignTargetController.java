@@ -1,8 +1,8 @@
-package org.example.async.controller;
+package org.example.feign.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.async.feign.common.dto.BaseRequestInfo;
-import org.example.async.feign.common.dto.BaseResponseInfo;
+import org.example.feign.fclient.common.dto.BaseRequestInfo;
+import org.example.feign.fclient.common.dto.BaseResponseInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

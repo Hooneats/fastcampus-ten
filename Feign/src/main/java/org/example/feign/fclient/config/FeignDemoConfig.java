@@ -1,7 +1,7 @@
-package org.example.async.feign.config;
+package org.example.feign.fclient.config;
 
-import org.example.async.feign.decoder.FeignDemoErrorDecoder;
-import org.example.async.feign.interceptor.FeignDemoInterceptor;
+import org.example.feign.fclient.decoder.FeignDemoErrorDecoder;
+import org.example.feign.fclient.interceptor.FeignDemoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

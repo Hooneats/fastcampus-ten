@@ -1,4 +1,4 @@
-package org.example.async.feign.interceptor;
+package org.example.feign.fclient.interceptor;
 
 import feign.Request;
 import feign.RequestInterceptor;

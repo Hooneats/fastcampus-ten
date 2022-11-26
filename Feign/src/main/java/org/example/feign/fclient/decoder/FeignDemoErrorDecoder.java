@@ -1,4 +1,4 @@
-package org.example.async.feign.decoder;
+package org.example.feign.fclient.decoder;
 
 
 import feign.Response;

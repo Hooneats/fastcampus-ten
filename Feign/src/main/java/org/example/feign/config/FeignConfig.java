@@ -1,7 +1,7 @@
-package org.example.async.config;
+package org.example.feign.config;
 
 import feign.Logger;
-import org.example.async.feign.logger.FeignCustomLogger;
+import org.example.feign.fclient.logger.FeignCustomLogger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

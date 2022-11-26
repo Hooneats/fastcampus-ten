@@ -1,4 +1,4 @@
-package org.example.async.feign.logger;
+package org.example.feign.fclient.logger;
 
 import feign.Logger;
 import feign.Request;

@@ -1,9 +1,9 @@
-package org.example.async.service;
+package org.example.feign.sercvice;
 
 import lombok.RequiredArgsConstructor;
-import org.example.async.feign.client.FeignDemoClient;
-import org.example.async.feign.common.dto.BaseRequestInfo;
-import org.example.async.feign.common.dto.BaseResponseInfo;
+import org.example.feign.fclient.client.FeignDemoClient;
+import org.example.feign.fclient.common.dto.BaseRequestInfo;
+import org.example.feign.fclient.common.dto.BaseResponseInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,15 @@
-package org.example.async;
+package org.example.feign;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients
 @SpringBootApplication
-public class AsyncApplication {
+public class FeignApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AsyncApplication.class);
+        SpringApplication.run(FeignApplication.class);
     }
 
     /**

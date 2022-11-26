@@ -1,8 +1,8 @@
-package org.example.async.feign.client;
+package org.example.feign.fclient.client;
 
-import org.example.async.feign.common.dto.BaseRequestInfo;
-import org.example.async.feign.common.dto.BaseResponseInfo;
-import org.example.async.feign.config.FeignDemoConfig;
+import org.example.feign.fclient.common.dto.BaseRequestInfo;
+import org.example.feign.fclient.common.dto.BaseResponseInfo;
+import org.example.feign.fclient.config.FeignDemoConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
