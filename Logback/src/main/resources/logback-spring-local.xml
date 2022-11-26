@@ -1,0 +1,41 @@
+<included>
+
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+<!--    위의 include 를 통해 아래를 추가한 것과 같다. -->
+<!--    <included>-->
+<!--        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--            <encoder>-->
+<!--                <pattern>${CONSOLE_LOG_PATTERN}</pattern>-->
+<!--                <charset>${CONSOLE_LOG_CHARSET}</charset>-->
+<!--            </encoder>-->
+<!--        </appender>-->
+<!--    </included>-->
+<!--    아래의 root 의 appender-ref 를 통해 위에 include 를 통해 가져온 CONSOLE 과 매칭 시킨다. -->
+<!--    추가적으로 CONSOLE_LOG_PATTERN,CONSOLE_LOG_CHARSET 의 경우 org/springframework/boot/logging/logback/defaults.xml 여기에 있다.-->
+<!--    -->
+
+    <appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
+<!--        커스텀의 경우 위에 name 이 겹치지 않게 CONSOLE2 로 만들어보자 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+<!--            쓰레드 기반으로 필터링 하겠다는 뜻-->
+            <level>INFO</level>
+<!--           TRACE < DEBUG < INFO < WARN < ERROR -->
+        </filter>
+        <layout>
+            <pattern>
+             [CONSOLE2] [%-5level] %d{yyyy-MM-dd HH:mm:ss} [%thread] [%logger{0}:%line] - %msg%n
+<!--                $logger{0} 의 경우 패키지 레벨로 40정도를 넣으면 거의 풀패키지 명이 찍힌다. -->
+            </pattern>
+        </layout>
+    </appender>
+
+
+    <root level="DEBUG">
+<!--        CONSOLE 의 경우 불러온것인데 따로 LogLevel 설정을 안했기에 root 설정인 DEBUG 를 따른다. -->
+        <appender-ref ref="CONSOLE"/>
+<!--        CONSOLE2 의 경우 따로 <level>INFO</level> 값으로 INFO 레벨 설정하였다. -->
+<!--        <appender-ref ref="CONSOLE2"/>-->
+    </root>
+
+</included>
